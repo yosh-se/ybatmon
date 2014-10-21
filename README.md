@@ -6,10 +6,10 @@ t reads battery info straight from /sys/class/power_supply/BAT0/.
 
 I start it with a small bash script like so:
 
-´´´
+```
 #!/bin/sh
 nohup python -u /path/to/ybatmon.py  &
-´´´
+```
 
 Dependencies
 ======
