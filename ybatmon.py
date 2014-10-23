@@ -34,20 +34,26 @@ class MainApp:
 
 			return { 'state':status, 'percentage':level,	'tooltip': status+", "+level+"%" }
 	
-	def get_icon_name(self, state, percentage):
+	def get_icon_name(self, state, percentage_s):
 		icon=''
-		if percentage < 10:
-			icon = 'battery_10'
-		elif percentage < 20:
-		  icon = 'battery_20'
-		elif percentage < 50:
-			icon = 'battery_50'
-		elif percentage < 75:
-			icon = 'battery_75'
-		elif percentage < 101:
-			icon = 'battery_100'
-		else:
+		try:
+			percentage = int(percentage_s)
+			if percentage < 10:
+				icon = 'battery_10'
+			elif percentage < 20:
+			  icon = 'battery_20'
+			elif percentage < 50:
+				icon = 'battery_50'
+			elif percentage < 75:
+				icon = 'battery_75'
+			elif percentage < 101:
+				icon = 'battery_100'
+			else:
+				icon = 'battery_unknown'
+				return icon
+		except:
 			icon = 'battery_unknown'
+			return icon
 
 		if state in ('Charging', 'Charged', 'Unknown', 'Full'):
 			icon = icon + '_ac'
@@ -55,7 +61,7 @@ class MainApp:
 	
 	def update_icon(self):
 		info = self.get_battery_info()
-		icon_name = self.get_icon_name(info['state'],int(info['percentage']))
+		icon_name = self.get_icon_name(info['state'],info['percentage'])
 		self.icon.set_from_file(os.path.dirname(os.path.realpath(__file__)) +'/icons/'+ icon_name + '.png')
 		self.icon.set_tooltip_text(info['tooltip'])
 		return True
