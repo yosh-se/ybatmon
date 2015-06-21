@@ -9,14 +9,15 @@ class MainApp:
 	def __init__(self):
 		try:
 			self.icon = gtk.StatusIcon()
+			self.icona = gtk.StatusIcon()
 			self.update_icon()
 			glib.timeout_add(1100, self.update_icon)
 		except:
 			glib.timeout_add(1100, self.update_icon)
 	
-	def get_battery_info(self):
+	def get_battery_info(self, battery = 0):
 			try:
-				fh = open("/sys/class/power_supply/BAT0/capacity", "r")
+				fh = open("/sys/class/power_supply/BAT"+str(battery)+"/capacity", "r")
 				level = fh.readline().rstrip()
 				fh.close()
 			except:
@@ -24,7 +25,7 @@ class MainApp:
 				print(e)
 				level = ""
 			try:
-				fh = open("/sys/class/power_supply/BAT0/status", "r")
+				fh = open("/sys/class/power_supply/BAT"+str(battery)+"/status", "r")
 				status = fh.readline().rstrip()
 				fh.close()
 			except:
@@ -61,7 +62,11 @@ class MainApp:
 	
 	def update_icon(self):
 		info = self.get_battery_info()
+		infoa = self.get_battery_info(1)
 		icon_name = self.get_icon_name(info['state'],info['percentage'])
+		icon_namea = self.get_icon_name(infoa['state'],infoa['percentage'])
+		self.icona.set_from_file(os.path.dirname(os.path.realpath(__file__)) +'/icons/'+ icon_name + '.png')
+		self.icona.set_tooltip_text(infoa['tooltip'])
 		self.icon.set_from_file(os.path.dirname(os.path.realpath(__file__)) +'/icons/'+ icon_name + '.png')
 		self.icon.set_tooltip_text(info['tooltip'])
 		return True
@@ -72,3 +77,4 @@ if __name__ == "__main__":
 		gtk.main()
 	except KeyboardInterrupt:
 		pass
+
