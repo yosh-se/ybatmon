@@ -4,7 +4,7 @@ import os
 import sys
 import gtk
 import glib
-import sys, traceback
+import traceback
 
 class MainApp:
     batteries = {} 
