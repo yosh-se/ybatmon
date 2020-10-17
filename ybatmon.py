@@ -1,14 +1,20 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
 import sys
-import gtk
-import glib
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk as gtk
+from gi.repository import GLib as glib
 import traceback
+import warnings
+
+warnings.simplefilter("ignore", category=DeprecationWarning)
 
 class MainApp:
     batteries = {} 
     def __init__(self):
+        self.update()
         try:
             self.update()
             glib.timeout_add(5000, self.update)
@@ -18,7 +24,7 @@ class MainApp:
     def update(self):
         self.find_batteries()
         try:
-            for index, battery in self.batteries.iteritems():
+            for index, battery in self.batteries.items():
                 self.get_battery_info(battery)
                 self.get_icon_name(battery)
                 battery['icon'].set_from_file(os.path.dirname(os.path.realpath(__file__)) +'/icons/'+ battery['icon_name'] + '.png')
